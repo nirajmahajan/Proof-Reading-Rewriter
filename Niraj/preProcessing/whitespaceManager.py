@@ -73,11 +73,17 @@ def hasRight(in_string):
 	else:
 		return False
 
-def preProcess(a):
-	a = re.sub('[.]+', '.', a)
+def preProcess(a1):
+	a = re.sub('\.\.\.', '$$$ELL$$$', a1)
+	a = re.sub('[\.]+', '.', a)
 	a = re.sub('[!]+', '!', a)
 	a = re.sub('[,]+', ',', a)
 	a = re.sub('[?]+', '?', a)
+	return a
+
+def postProcess(a):
+	a = re.sub('\$\$\$ELL\$\$\$', '...', a)
+	return a
 
 # Inputs a list of strings and removes extra white spaces around punctuations 
 def spaceTrimmer(in_lista):
@@ -85,7 +91,7 @@ def spaceTrimmer(in_lista):
 	out_list = []
 
 	for i in range(len(in_list)):
-		preProcess(in_list[i])
+		in_list[i] = preProcess(in_list[i])
 		if(isFullLeft(in_list[i])):
 			if(i == 0):
 				continue
@@ -154,5 +160,7 @@ def spaceTrimmer(in_lista):
 		else:
 			ans.append(out_list[i])
 
+	ans = [postProcess(a) for a in ans]
 	return ans
+
 	
