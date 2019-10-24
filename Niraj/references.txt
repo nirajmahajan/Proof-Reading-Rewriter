@@ -1,0 +1,7 @@
+Dataset : 
+https://github.com/dwyl/english-words
+nltk.corpus.words()
+
+Levenshtein Algorithm :
+https://dzone.com/articles/the-levenshtein-algorithm-1
+https://norvig.com/spell-correct.html
