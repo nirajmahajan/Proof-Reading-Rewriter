@@ -17,7 +17,7 @@ with open('../data/freq.pickle', 'rb') as handle:
     FREQ_TABLE = pickle.load(handle)
 
 
-def processWord(stri, limit = 6):
+def processWord(stri, limit, only_wrong):
 
 	def sorter(a):
 		if(distance(a, stri) == 1):
@@ -25,20 +25,21 @@ def processWord(stri, limit = 6):
 		else:
 			return FREQ_TABLE[a] - 150 
 
-	# if(stri.capitalize() in WORDS_DB and stri.lower() in WORDS_DB):
-	# 	return [stri.lower()] + [stri.capitalize()]
-	# elif(stri.capitalize() in WORDS_DB):
-	# 	return [stri.capitalize()]
-	# elif(stri.lower() in WORDS_DB):
-	# 	return [stri.lower()]
-	# elif(stri.upper() in WORDS_DB):
-	# 	return [stri.upper()]
-	# else:
+	if(only_wrong):
+		if(stri.capitalize() in WORDS_DB and stri.lower() in WORDS_DB):
+			return [stri.lower()] + [stri.capitalize()]
+		elif(stri.capitalize() in WORDS_DB):
+			return [stri.capitalize()]
+		elif(stri.lower() in WORDS_DB):
+			return [stri.lower()]
+		elif(stri.upper() in WORDS_DB):
+			return [stri.upper()]
+
 	ans = (([a for a in one_away(stri) if (a in WORDS_DB)] + [a for a in two_away(stri) if (a in WORDS_DB)]).sort(key = sorter))
 	ans = [a for a in one_away(stri) if (a in WORDS_DB)] + [a for a in two_away(stri) if (a in WORDS_DB)]
 	ans.sort(key=sorter, reverse=True)
 	return list(set(ans[:min(limit,len(ans))]))
 
-def spellCheck(in_list):
-	return [processWord(a) for a in in_list]
+def spellCheck(in_list, limit = 6, only_wrong = True):
+	return [processWord(a, limit, only_wrong) for a in in_list]
 	
