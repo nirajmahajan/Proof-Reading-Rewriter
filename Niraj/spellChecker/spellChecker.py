@@ -21,13 +21,15 @@ def processWord(stri, limit, only_wrong):
 
 	def sorter(a):
 		if(distance(a, stri) == 1):
-			return FREQ_TABLE[a] + 150
+			return FREQ_TABLE[a] + 300
 		else:
 			return FREQ_TABLE[a] - 150 
 
 	if(only_wrong):
-		if(stri.capitalize() in WORDS_DB and stri.lower() in WORDS_DB):
-			return [stri.lower()] + [stri.capitalize()]
+		# if(stri.capitalize() in WORDS_DB and stri.lower() in WORDS_DB):
+		# 	return [stri.lower()] + [stri.capitalize()]
+		if(stri in WORDS_DB):
+			return [stri]
 		elif(stri.capitalize() in WORDS_DB):
 			return [stri.capitalize()]
 		elif(stri.lower() in WORDS_DB):
@@ -38,6 +40,16 @@ def processWord(stri, limit, only_wrong):
 	ans = (([a for a in one_away(stri) if (a in WORDS_DB)] + [a for a in two_away(stri) if (a in WORDS_DB)]).sort(key = sorter))
 	ans = [a for a in one_away(stri) if (a in WORDS_DB)] + [a for a in two_away(stri) if (a in WORDS_DB)]
 	ans.sort(key=sorter, reverse=True)
+
+	# # now give priority to those ending with the same letter
+	# ret = [a for a in ans if a.endswith(stri[len(stri)-1])]
+	# ret2 = [a for a in ans if not a.endswith(stri[len(stri)-1])]
+	# ans = ret + ret2
+	
+	# now give priority to those starting with the same letter
+	ret = [a for a in ans if a.startswith(stri[0])]
+	ret2 = [a for a in ans if not a.startswith(stri[0])]
+	ans = ret + ret2
 	return list(set(ans[:min(limit,len(ans))]))
 
 def spellCheck(in_list, limit = 6, only_wrong = True):

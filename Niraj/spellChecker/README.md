@@ -7,9 +7,8 @@ In this component of the project, I have implemented an efficient spellchecker b
 ### Code Structure:
 
 1. The database files are stored as pickle files in the data folder, where the freq.pickle file has a dictionary of, Ill, frequencies! And the db.pickle has an unordered_set of words. The only reason that made me augment the additional database into the nltk.corpus database was that nltk.courpus did not have words with apostrophe's.
-2. The helpers.py file has helper functions that compute the distance betIen two strings, and a couple other that return all the strings that have a distance of 'one' and 'two' with respect to a particular string. These functions can be accessed by other sub units as Ill since they are a bit general functions to the project.
+2. The helpers.py file has helper functions that compute the distance between two strings, and a couple other that return all the strings that have a distance of 'one' and 'two' with respect to a particular string. These functions can be accessed by other sub units as Ill since they are a bit general functions to the project.
 3. The main file, spellChecker.py, has a function 'spellChecker' which takes in a list of words, and an optional argument to specify the maximum suggestions output by the code. (default 6).
-4. The frequency table generator file has a script that I used to generate the freq.pickle file. A similar script was run for generating the db.pickle file
 
 ### Technicalities
 
