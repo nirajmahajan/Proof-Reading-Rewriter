@@ -21,7 +21,7 @@ def processWord(stri, limit, only_wrong):
 
 	def sorter(a):
 		if(distance(a, stri) == 1):
-			return FREQ_TABLE[a] + 300
+			return FREQ_TABLE[a] + 150
 		else:
 			return FREQ_TABLE[a] - 150 
 
@@ -50,7 +50,14 @@ def processWord(stri, limit, only_wrong):
 	ret = [a for a in ans if a.startswith(stri[0])]
 	ret2 = [a for a in ans if not a.startswith(stri[0])]
 	ans = ret + ret2
-	return list(set(ans[:min(limit,len(ans))]))
+
+	# if length less than or equal to three, then give max priority to orignal spelling if exists
+	if(len(stri) <= 3):
+		if(stri in ans):
+			ans.remove(stri)
+			ans = [stri] + ans
+
+	return ans[:min(limit,len(ans))]
 
 def spellCheck(in_list, limit = 6, only_wrong = True):
 	return [processWord(a, limit, only_wrong) for a in in_list]
