@@ -46,9 +46,7 @@ def best_syn(word):
             best_score = score
             best_syn = syn_word
         if word[0].isupper():
-            best_syn = best_syn(word).capitalize()
-        else:
-            best_syn = best_syn(word)
+            best_syn = best_syn.capitalize()
     # [best_score, best_syn]
     return best_syn
 
