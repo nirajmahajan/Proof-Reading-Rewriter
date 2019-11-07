@@ -12,6 +12,9 @@ def rewrite(sentence):
             words.append(token.text)
     rewrited_sentence = sentence
     for word in words:
-        word_syn = best_syn(word)
+    	if word[0].isupper():
+    		word_syn = best_syn(word).capitalize()
+    	else:
+        	word_syn = best_syn(word)
         rewrited_sentence = rewrited_sentence.replace(word, word_syn)
     return rewrited_sentence
