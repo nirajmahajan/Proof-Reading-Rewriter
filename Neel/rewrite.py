@@ -1,6 +1,8 @@
 from spacy.tokenizer import Tokenizer
 from spacy.lang.en.examples import sentences
 from suggest_synonym import *
+import nltk
+from nltk.tokenize.treebank import TreebankWordDetokenizer
 
 def rewrite(sentence):
     rewrite_types = [u'NN', u'NNS', u'JJ', u'JJS']
@@ -12,9 +14,8 @@ def rewrite(sentence):
             words.append(token.text)
     rewrited_sentence = sentence
     for word in words:
-    	if word[0].isupper():
-    		word_syn = best_syn(word).capitalize()
-    	else:
-        	word_syn = best_syn(word)
+        word_syn = best_syn(word)
         rewrited_sentence = rewrited_sentence.replace(word, word_syn)
+    l=(nltk.word_tokenize(rewrited_sentence))
+    rewrited_sentence=TreebankWordDetokenizer().detokenize(l)
     return rewrited_sentence
