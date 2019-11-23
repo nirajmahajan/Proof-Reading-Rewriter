@@ -31,9 +31,9 @@ def act_pas(sen):
 		elif not foundS:
 			subN = i[0].lower()
 			if i[0].lower() not in nouns.keys():
-				sub = sub + "by "+ i[0].lower() + " "
+				sub = sub + i[0].lower() + " "
 			else:
-				sub = sub + "by "+ nouns[i[0].lower()] + " "
+				sub = sub + nouns[i[0].lower()] + " "
 			foundS = True
 		elif not foundV:
 			if i[1] == 'DT':
@@ -44,10 +44,11 @@ def act_pas(sen):
 				foundO = True
 				if i[0] not in inv_nouns.keys():
 					obj = obj + i[0] + " "
+					objN = i[0]
 				else:
 					obj = obj + inv_nouns[i[0]] + " "
+					objN = inv_nouns[i[0]]
 				objT = i[1]
-				objN = inv_nouns[i[0]]
 			else:
 				v = v + i[0] + " "
 		elif not foundO:
@@ -56,8 +57,10 @@ def act_pas(sen):
 			else:
 				if i[0] not in inv_nouns.keys():
 					obj = obj + i[0] + " "
+					objN = i[0]
 				else:
 					obj = obj + inv_nouns[i[0]] + " "
+					objN = inv_nouns[i[0]]
 				foundO = True
 				objT = i[1]
 		else:
@@ -69,7 +72,7 @@ def act_pas(sen):
 	if objN == 'i':
 		print(objN)
 		isI = 'i'
-	newS = obj + analyse(v,count,isI) + sub + extra
+	newS = obj + analyse(v,count,isI) + "by " + sub + extra
 	return newS
 
 def analyse(s,c,isI):
