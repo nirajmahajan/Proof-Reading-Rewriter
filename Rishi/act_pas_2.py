@@ -7,6 +7,7 @@ nouns = {'he':'him','she':'her','i':'me','they':'them', 'we':'us'}
 inv_nouns = {'him':'he','her':'she','me':'i','them':'they', 'us':'we'}
 noun = ['NN', 'NNS', 'NNP', 'NNPS', 'PRP']
 plural = ['NNS','NNPS']
+det = ['DT', 'PDT']
 
 with open('participles.pickle', 'rb') as handle:
     participles = pickle.load(handle)
@@ -25,6 +26,8 @@ def act_pas(sen):
 	objT = ''
 	count = ''
 	isI = 'ni'
+	vL = []
+	vTL = []
 	for i in tag:
 		if i[1] not in noun and not foundS:
 			sub = sub + i[0].lower() + " "
@@ -36,7 +39,7 @@ def act_pas(sen):
 				sub = sub + nouns[i[0].lower()] + " "
 			foundS = True
 		elif not foundV:
-			if i[1] == 'DT':
+			if i[1] in det:
 				foundV = True
 				obj = obj + i[0] + " "
 			elif i[1] in noun:
@@ -51,6 +54,8 @@ def act_pas(sen):
 				objT = i[1]
 			else:
 				v = v + i[0] + " "
+				vL.append(i[0])
+				vTL.append(i)
 		elif not foundO:
 			if i[1] not in noun:
 				obj = obj + i[0] + " "
@@ -72,28 +77,33 @@ def act_pas(sen):
 	if objN == 'i':
 		print(objN)
 		isI = 'i'
-	newS = obj + analyse(v,count,isI) + "by " + sub + extra
+	newS = obj + analyse(vL,vTL,count,isI) + "by " + sub + extra
 	return newS
 
-def analyse(s,c,isI):
-	l = nltk.word_tokenize(s)
-	l1 = nltk.word_tokenize(s)
-	tag = nltk.pos_tag(l)
+def analyse(vL,vTL,c,isI):
+	l = vL.copy()
+	l1 = vL.copy()
+	tag = vTL.copy()
 	haves = ['has', 'had' ,'have']
 	aux_plural = ['were', 'are']
 	aux_single = ['was', 'is', 'am']
 	present = ['VB', 'VBP', 'VBZ']
 	pcont = ['VBG']
 	past = ['VBD']
+	verbs = ['VB', 'VBP', 'VBZ', 'VBG', 'VBD']
 	aux = False
+	being_ = False
 	index = -1
+	sind = -1
 	if c == 'single':
 		for i in l1:
 			index = index + 1
+			sind = sind + 1
 			if i in haves:
 				if i in ['have']:
 					l[index] = 'has'
 				l.insert(index + 1, 'been')
+				index = index + 1
 				aux = True
 			elif i in aux_plural:
 				aux = True
@@ -110,16 +120,17 @@ def analyse(s,c,isI):
 				elif isI == 'ni' and l[index] == 'am':
 					l[index] = 'is'
 				aux = True
-			elif tag[index][1] == 'MD':
+			elif tag[sind][1] == 'MD':
 				try:
 					if l[index + 1] not in haves:
 						l.insert(index + 1, 'be')
+						index = index + 1
 					aux = True
 				except:
 					print("Not possible")
 			elif not aux:
 				aux = True
-				if tag[index][1] in present:
+				if tag[sind][1] in present:
 					if WordNetLemmatizer().lemmatize(l[index],'v') not in participles.keys():
 						if WordNetLemmatizer().lemmatize(l[index],'v').endswith('e'):
 							l[index] = WordNetLemmatizer().lemmatize(l[index],'v') + 'd'
@@ -131,6 +142,7 @@ def analyse(s,c,isI):
 						l.insert(index, 'am')
 					else:
 						l.insert(index, 'is')
+					index = index + 1
 				else:
 					if WordNetLemmatizer().lemmatize(l[index],'v') not in participles.keys():
 						if WordNetLemmatizer().lemmatize(l[index],'v').endswith('e'):
@@ -141,7 +153,7 @@ def analyse(s,c,isI):
 						l[index] = participles[WordNetLemmatizer().lemmatize(l[index],'v')]
 					l.insert(index, 'was')
 			elif aux:
-				if tag[index][1] in pcont:
+				if tag[sind][1] in pcont:
 					if WordNetLemmatizer().lemmatize(l[index],'v') not in participles.keys():
 						if WordNetLemmatizer().lemmatize(l[index],'v').endswith('e'):
 							l[index] = WordNetLemmatizer().lemmatize(l[index],'v') + 'd'
@@ -149,14 +161,28 @@ def analyse(s,c,isI):
 							l[index] = WordNetLemmatizer().lemmatize(l[index],'v') + 'ed' 
 					else:
 						l[index] = participles[WordNetLemmatizer().lemmatize(l[index],'v')]
-					l.insert(index, 'being')
+					if not being_:
+						l.insert(index, 'being')
+						index = index + 1
+						being_ = True
+				elif tag[sind][1] in verbs:
+					if WordNetLemmatizer().lemmatize(l[index],'v') not in participles.keys():
+						if WordNetLemmatizer().lemmatize(l[index],'v').endswith('e'):
+							l[index] = WordNetLemmatizer().lemmatize(l[index],'v') + 'd'
+						else:
+							l[index] = WordNetLemmatizer().lemmatize(l[index],'v') + 'ed' 
+					else:
+						l[index] = participles[WordNetLemmatizer().lemmatize(l[index],'v')]
+
 	else:
 		for i in l1:
+			sind = sind + 1
 			index = index + 1
 			if i in haves:
 				if i in ['has']:
 					l[index] = 'have'
 				l.insert(index + 1, 'been')
+				index = index + 1
 				aux = True
 			elif i in aux_single:
 				aux = True
@@ -166,16 +192,17 @@ def analyse(s,c,isI):
 					l[index] = 'are'
 			elif i in aux_plural:
 				aux = True
-			elif tag[index][1] == 'MD':
+			elif tag[sind][1] == 'MD':
 				try:
 					if l[index + 1] not in haves:
 						l.insert(index + 1, 'be')
+						index = index + 1
 					aux = True
 				except:
 					print("Not possible")
 			elif not aux:
 				aux = True
-				if tag[index][1] in present:
+				if tag[sind][1] in present:
 					if WordNetLemmatizer().lemmatize(l[index],'v') not in participles.keys():
 						if WordNetLemmatizer().lemmatize(l[index],'v').endswith('e'):
 							l[index] = WordNetLemmatizer().lemmatize(l[index],'v') + 'd'
@@ -184,6 +211,7 @@ def analyse(s,c,isI):
 					else:
 						l[index] = participles[WordNetLemmatizer().lemmatize(l[index],'v')]
 					l.insert(index, 'are')
+					index = index + 1
 				else:
 					if WordNetLemmatizer().lemmatize(l[index],'v') not in participles.keys():
 						if WordNetLemmatizer().lemmatize(l[index],'v').endswith('e'):
@@ -193,8 +221,9 @@ def analyse(s,c,isI):
 					else:
 						l[index] = participles[WordNetLemmatizer().lemmatize(l[index],'v')]
 					l.insert(index, 'were')
+					index = index + 1
 			elif aux:
-				if tag[index][1] in pcont:
+				if tag[sind][1] in pcont:
 					if WordNetLemmatizer().lemmatize(l[index],'v') not in participles.keys():
 						if WordNetLemmatizer().lemmatize(l[index],'v').endswith('e'):
 							l[index] = WordNetLemmatizer().lemmatize(l[index],'v') + 'd'
@@ -202,7 +231,18 @@ def analyse(s,c,isI):
 							l[index] = WordNetLemmatizer().lemmatize(l[index],'v') + 'ed'
 					else:
 						l[index] = participles[WordNetLemmatizer().lemmatize(l[index],'v')]
-					l.insert(index, 'being')
+					if not being_:
+						l.insert(index, 'being')
+						index = index + 1
+						being_ = True
+				elif tag[sind][1] in verbs:
+					if WordNetLemmatizer().lemmatize(l[index],'v') not in participles.keys():
+						if WordNetLemmatizer().lemmatize(l[index],'v').endswith('e'):
+							l[index] = WordNetLemmatizer().lemmatize(l[index],'v') + 'd'
+						else:
+							l[index] = WordNetLemmatizer().lemmatize(l[index],'v') + 'ed'
+					else:
+						l[index] = participles[WordNetLemmatizer().lemmatize(l[index],'v')]
 
 	rs = TreebankWordDetokenizer().detokenize(l) + " "
 	return (rs)
