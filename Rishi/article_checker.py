@@ -8,6 +8,7 @@ pro_det = ['WP','WDT','WP$']
 a_an = ['a','an','A','An']
 nouns = ['NN','NNS']
 the_cases = ['RBS','JJS','NNS']
+h_cases = ['hour', 'honest', 'honesty', 'honour', 'honoured']
 def art_check(s):
 	l = nltk.word_tokenize(s)
 	pos = nltk.pos_tag(l)
@@ -17,7 +18,7 @@ def art_check(s):
 		index = index+1
 		if i[1]=='DT':
 			try:
-				if pos[index][0][0] in vowels and pos[index][0].lower() not in WORDS_DB:
+				if (pos[index][0][0] in vowels and pos[index][0].lower() not in WORDS_DB) or pos[index][0].lower() in h_cases:
 					if(i[0]=='a'):
 						l[index-1] = 'an'
 					elif(i[0]=='A'):

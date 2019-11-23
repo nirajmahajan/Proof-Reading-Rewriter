@@ -3,7 +3,7 @@ import spacy
 import urllib
 import json
 
-nlp = spacy.load('en_core_web_sm')
+nlp = spacy.load('en_core_web_lg')
 
 def syn_list(word):
     url = "https://api.datamuse.com/words?ml=" + word
