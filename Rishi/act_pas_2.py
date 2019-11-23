@@ -118,6 +118,7 @@ def analyse(s,c,isI):
 				except:
 					print("Not possible")
 			elif not aux:
+				aux = True
 				if tag[index][1] in present:
 					if WordNetLemmatizer().lemmatize(l[index],'v') not in participles.keys():
 						if WordNetLemmatizer().lemmatize(l[index],'v').endswith('e'):
@@ -173,6 +174,7 @@ def analyse(s,c,isI):
 				except:
 					print("Not possible")
 			elif not aux:
+				aux = True
 				if tag[index][1] in present:
 					if WordNetLemmatizer().lemmatize(l[index],'v') not in participles.keys():
 						if WordNetLemmatizer().lemmatize(l[index],'v').endswith('e'):
