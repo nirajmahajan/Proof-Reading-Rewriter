@@ -120,7 +120,10 @@ def analyse(s,c,isI):
 			elif not aux:
 				if tag[index][1] in present:
 					if WordNetLemmatizer().lemmatize(l[index],'v') not in participles.keys():
-						l[index] = WordNetLemmatizer().lemmatize(l[index],'v') + 'ed'
+						if WordNetLemmatizer().lemmatize(l[index],'v').endswith('e'):
+							l[index] = WordNetLemmatizer().lemmatize(l[index],'v') + 'd'
+						else:
+							l[index] = WordNetLemmatizer().lemmatize(l[index],'v') + 'ed'
 					else:
 						l[index] = participles[WordNetLemmatizer().lemmatize(l[index],'v')]
 					if isI == 'i':
@@ -129,14 +132,20 @@ def analyse(s,c,isI):
 						l.insert(index, 'is')
 				else:
 					if WordNetLemmatizer().lemmatize(l[index],'v') not in participles.keys():
-						l[index] = WordNetLemmatizer().lemmatize(l[index],'v') + 'ed'
+						if WordNetLemmatizer().lemmatize(l[index],'v').endswith('e'):
+							l[index] = WordNetLemmatizer().lemmatize(l[index],'v') + 'd'
+						else:
+							l[index] = WordNetLemmatizer().lemmatize(l[index],'v') + 'ed'
 					else:
 						l[index] = participles[WordNetLemmatizer().lemmatize(l[index],'v')]
 					l.insert(index, 'was')
 			elif aux:
 				if tag[index][1] in pcont:
 					if WordNetLemmatizer().lemmatize(l[index],'v') not in participles.keys():
-						l[index] = WordNetLemmatizer().lemmatize(l[index],'v') + 'ed'
+						if WordNetLemmatizer().lemmatize(l[index],'v').endswith('e'):
+							l[index] = WordNetLemmatizer().lemmatize(l[index],'v') + 'd'
+						else:
+							l[index] = WordNetLemmatizer().lemmatize(l[index],'v') + 'ed' 
 					else:
 						l[index] = participles[WordNetLemmatizer().lemmatize(l[index],'v')]
 					l.insert(index, 'being')
@@ -166,20 +175,29 @@ def analyse(s,c,isI):
 			elif not aux:
 				if tag[index][1] in present:
 					if WordNetLemmatizer().lemmatize(l[index],'v') not in participles.keys():
-						l[index] = WordNetLemmatizer().lemmatize(l[index],'v') + 'ed'
+						if WordNetLemmatizer().lemmatize(l[index],'v').endswith('e'):
+							l[index] = WordNetLemmatizer().lemmatize(l[index],'v') + 'd'
+						else:
+							l[index] = WordNetLemmatizer().lemmatize(l[index],'v') + 'ed'
 					else:
 						l[index] = participles[WordNetLemmatizer().lemmatize(l[index],'v')]
 					l.insert(index, 'are')
 				else:
 					if WordNetLemmatizer().lemmatize(l[index],'v') not in participles.keys():
-						l[index] = WordNetLemmatizer().lemmatize(l[index],'v') + 'ed'
+						if WordNetLemmatizer().lemmatize(l[index],'v').endswith('e'):
+							l[index] = WordNetLemmatizer().lemmatize(l[index],'v') + 'd'
+						else:
+							l[index] = WordNetLemmatizer().lemmatize(l[index],'v') + 'ed'
 					else:
 						l[index] = participles[WordNetLemmatizer().lemmatize(l[index],'v')]
 					l.insert(index, 'were')
 			elif aux:
 				if tag[index][1] in pcont:
 					if WordNetLemmatizer().lemmatize(l[index],'v') not in participles.keys():
-						l[index] = WordNetLemmatizer().lemmatize(l[index],'v') + 'ed'
+						if WordNetLemmatizer().lemmatize(l[index],'v').endswith('e'):
+							l[index] = WordNetLemmatizer().lemmatize(l[index],'v') + 'd'
+						else:
+							l[index] = WordNetLemmatizer().lemmatize(l[index],'v') + 'ed'
 					else:
 						l[index] = participles[WordNetLemmatizer().lemmatize(l[index],'v')]
 					l.insert(index, 'being')
