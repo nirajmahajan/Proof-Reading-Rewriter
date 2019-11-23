@@ -7,7 +7,7 @@ nouns = {'he':'him','she':'her','i':'me','they':'them', 'we':'us'}
 inv_nouns = {'him':'he','her':'she','me':'i','them':'they', 'us':'we'}
 noun = ['NN', 'NNS', 'NNP', 'NNPS', 'PRP']
 plural = ['NNS','NNPS']
-det = ['DT', 'PDT']
+det = ['DT', 'PDT', 'PRP$', 'POS']
 
 with open('participles.pickle', 'rb') as handle:
     participles = pickle.load(handle)
