@@ -1,5 +1,6 @@
 import pickle
 import sqlite3
+import re
 from helpers import *
 # Inputs a list of strings 
 # Outputs a list of list of strings
@@ -10,6 +11,82 @@ from helpers import *
 conn = sqlite3.connect('../data/dumps/Trigram-Bigram-Dictionary.db')
 c = conn.cursor()
 
+# Some helpers to access the sql database
+def fetchTrigFreq(w1, w2, w3):
+	c.execute('''SELECT freq FROM Trigrams WHERE first = ? AND second = ? AND third = ?''', [w1, w2, w3])
+	data1 = c.fetchall()
+	c.execute('''SELECT freq FROM Trigrams1 WHERE first = ? AND second = ? AND third = ?''', [w1, w2, w3])
+	data2 = c.fetchall()
+	if(len(data1) == 0 and len(data2) == 0):
+		return 0
+	elif(len(data1) == 0):
+		return 4* data2[0][0]
+	elif(len(data2) == 0):
+		return data1[0][0]
+	else:
+		return data1[0][0] + 4*data2[0][0]
+
+def fetchBigFreq(w1, w2):
+	# print('call', flush=True)
+	c.execute('''SELECT freq FROM Bigrams WHERE first = ? AND second = ?''', [w1, w2])
+	data1 = c.fetchall()
+	if(len(data1) == 0):
+		return 0
+	else:
+		return data1[0][0]
+
+# Calculates the score of a given target, with respect to it's neighbours
+# lst is the list of strings while targ is a integer denoting the 
+# position of the target string
+def calculateScore(lst, targ):
+	tscore = 0
+	bscore = 0
+	tcount = 0
+	bcount = 0
+	
+	l2 = None
+	l1 = None
+	target = None
+	r1 = None
+	r2 = None
+	if(targ-1 >= 0):
+		l1 = lst[targ-1]
+	if(targ-2 >= 0):
+		l2 = lst[targ-2]
+	target = lst[targ]
+	if(targ+1 < len(lst)):
+		r1 = lst[targ+1]
+	if(targ+2 < len(lst)):
+		r2 = lst[targ+2]
+	
+
+	if(l2 != None and l1 != None):
+		tscore = tscore + 3*fetchTrigFreq(l2, l1, target)
+		tcount = tcount + 1
+	if(l1 != None and r1 != None):
+		tscore = tscore + 4*fetchTrigFreq(l1, target, r1)
+		tcount = tcount + 1
+	if(r1 != None and r2 != None):
+		tscore = tscore + 3*fetchTrigFreq(target, r1, r2)
+		tcount = tcount + 1
+	# if(not SQLON):
+	if(True):
+		if(r1 != None):
+			bscore = bscore + fetchBigFreq(target, r1)
+			bcount = bcount + 1
+		if(l1 != None):
+			bscore = bscore + fetchBigFreq(l1, target)
+			bcount = bcount + 1
+
+	if(not tcount == 0):
+		tscore = tscore / tcount
+	# if(not SQLON):
+	if(True):
+		if(not bcount == 0):
+			bscore = bscore / bcount
+		tscore = tscore + 0.3 * bscore
+	return tscore
+
 # unordered set of all dictionary words
 # Extends an online db(check referneces) with the nltk words database
 with open('../data/dumps/db.pickle', 'rb') as handle:
@@ -17,6 +94,9 @@ with open('../data/dumps/db.pickle', 'rb') as handle:
 
 with open('../data/dumps/freq.pickle', 'rb') as handle:
     FREQ = pickle.load(handle)
+
+# with open('../data/dumps/big.pickle', 'rb') as handle:
+# 	Bigrams = pickle.load(handle)
 
 # Helper function to acces the Words table in the database
 def inDictionary(w):
@@ -43,7 +123,6 @@ def getFrequency(w):
 	return FREQ.get(w, 0)
 
 def processWord(stri, limit, only_wrong):
-
 	def sorter(a):
 		if(distance(a, stri) == 1):
 			return getFrequency(a) + 7000
@@ -82,8 +161,27 @@ def processWord(stri, limit, only_wrong):
 			ans.remove(stri)
 			ans = [stri] + ans
 
-	return ans[:min(limit,len(ans))]
+	return ans
 
-def spellCheck(in_list, limit = 6, only_wrong = True):
-	return [processWord(a, limit, only_wrong) for a in in_list]
+def spellCheck(in_list, limit = 5, only_wrong = True):
+	ans = []
+	for elem in in_list:
+		if (re.match(r'^[^a-zA-Z]$', elem) == None):
+			ans.append(processWord(elem, limit, only_wrong))
+		else:
+			ans.append([elem])
+
+	for it, elem in enumerate(ans):
+		def trigSorter(a):
+			store = in_list[it]
+			in_list[it] = a
+			vla = calculateScore(in_list, it)
+			in_list[it] = store
+			return vla
+		ans[it].sort(key = trigSorter, reverse=True)
+		ans[it] = ans[it][0:min(limit,len(ans[it]))]
+	return ans
+
+
+
 	
