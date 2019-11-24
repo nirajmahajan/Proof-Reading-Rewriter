@@ -166,6 +166,13 @@ def analyse(vL,vTL,c,isI):
 						l[index] = participles[WordNetLemmatizer().lemmatize(l[index],'v')]
 					l.insert(index, 'was')
 			elif aux:
+				try:
+					if tag[sind][0] == 'going' and tag[sind + 1][0] == 'to' and tag[sind + 2][1] in verbs:
+						l.insert(index + 2, 'be')
+						index = index + 1
+						continue
+				except:
+					pass
 				if tag[sind][1] in pcont:
 					if WordNetLemmatizer().lemmatize(l[index],'v') not in participles.keys():
 						if WordNetLemmatizer().lemmatize(l[index],'v').endswith('e'):
@@ -242,6 +249,13 @@ def analyse(vL,vTL,c,isI):
 					l.insert(index, 'were')
 					index = index + 1
 			elif aux:
+				try:
+					if tag[sind][0] == 'going' and tag[sind + 1][0] == 'to' and tag[sind + 2][1] in verbs:
+						l.insert(index + 2, 'be')
+						index = index + 1
+						continue
+				except:
+					pass
 				if tag[sind][1] in pcont:
 					if WordNetLemmatizer().lemmatize(l[index],'v') not in participles.keys():
 						if WordNetLemmatizer().lemmatize(l[index],'v').endswith('e'):
