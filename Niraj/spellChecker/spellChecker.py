@@ -1,4 +1,5 @@
 import pickle
+import sqlite3
 from helpers import *
 # Inputs a list of strings 
 # Outputs a list of list of strings
@@ -6,39 +7,63 @@ from helpers import *
 # The only punctuations allowed are apostrophes and hifens
 # It is assumed that the input list is free of all other irrelevant punctuations
 
+conn = sqlite3.connect('../data/dumps/Trigram-Bigram-Dictionary.db')
+c = conn.cursor()
 
 # unordered set of all dictionary words
 # Extends an online db(check referneces) with the nltk words database
-with open('../data/db.pickle', 'rb') as handle:
-    WORDS_DB = pickle.load(handle)
+with open('../data/dumps/db.pickle', 'rb') as handle:
+    WORDS = pickle.load(handle)
 
-# dictionary of all common words with frequency
-with open('../data/freq.pickle', 'rb') as handle:
-    FREQ_TABLE = pickle.load(handle)
+with open('../data/dumps/freq.pickle', 'rb') as handle:
+    FREQ = pickle.load(handle)
 
+# Helper function to acces the Words table in the database
+def inDictionary(w):
+	# print(w)
+	# c.execute('''SELECT id FROM Words WHERE word = ? LIMIT 1''', [w])
+	# data1 = c.fetchall()
+
+	# if(len(data1) == 0):
+	# 	return False
+	# else:
+	# 	return True
+	return w in WORDS
+
+# Helper Function to access the Frequencies Table in the Database
+def getFrequency(w):
+	# print(w)
+	# c.execute('''SELECT freq FROM Frequencies WHERE word = ? LIMIT 1''', [w])
+	# data1 = c.fetchall()
+
+	# if(len(data1) == 0):
+	# 	return 0
+	# else:
+	# 	return data1[0][0]
+	return FREQ.get(w, 0)
 
 def processWord(stri, limit, only_wrong):
 
 	def sorter(a):
 		if(distance(a, stri) == 1):
-			return FREQ_TABLE[a] + 150
+			return getFrequency(a) + 7000
 		else:
-			return FREQ_TABLE[a] - 150 
+			return getFrequency(a) - 150 
 
 	if(only_wrong):
 		# if(stri.capitalize() in WORDS_DB and stri.lower() in WORDS_DB):
 		# 	return [stri.lower()] + [stri.capitalize()]
-		if(stri in WORDS_DB):
+		if(inDictionary(stri)):
 			return [stri]
-		elif(stri.capitalize() in WORDS_DB):
+		elif(inDictionary(stri.capitalize())):
 			return [stri.capitalize()]
-		elif(stri.lower() in WORDS_DB):
+		elif(inDictionary(stri.lower())):
 			return [stri.lower()]
-		elif(stri.upper() in WORDS_DB):
+		elif(inDictionary(stri.upper())):
 			return [stri.upper()]
 
-	ans = (([a for a in one_away(stri) if (a in WORDS_DB)] + [a for a in two_away(stri) if (a in WORDS_DB)]).sort(key = sorter))
-	ans = [a for a in one_away(stri) if (a in WORDS_DB)] + [a for a in two_away(stri) if (a in WORDS_DB)]
+	ans = (([a for a in one_away(stri) if (inDictionary(a))] + [a for a in two_away(stri) if (inDictionary(a))]).sort(key = sorter))
+	ans = [a for a in one_away(stri) if (inDictionary(a))] + [a for a in two_away(stri) if (inDictionary(a))]
 	ans.sort(key=sorter, reverse=True)
 
 	# # now give priority to those ending with the same letter
