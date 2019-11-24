@@ -1,12 +1,32 @@
 import os
 import urllib
 import requests
+import numpy as np
 import re
 from noun_id import *
 	
+# returns the distance in two strings
+# Distance calculated on the basis of Levenshtein Distance Algorithm 
+# Has a linear runtime
+def distance(a, b):
+	dp = np.zeros((len(a)+1, len(b)+1), dtype=int)
+	for i in range(len(a)+1):
+		dp[i, 0] = i
+	for i in range(len(b)+1):
+		dp[0, i] = i
+	
+	for i in range(1, len(a)+1):
+		for j in range(1, len(b)+1):
+			if(a[i-1] == b[j-1]):
+				dp[i, j] = dp[i-1, j-1]
+			else:
+				dp[i, j] = min(dp[i, j-1], dp[i-1, j], dp[i-1, j-1]) + 1
+
+	return dp[len(a), len(b)]
+
 def APIexecute(query, i):
 	encoded_query = urllib.parse.quote(query)
-	params = {'corpus': 'eng-us', 'query': encoded_query, 'topk': 3}
+	params = {'corpus': 'eng-us', 'query': encoded_query, 'topk': 5}
 	params = '&'.join('{}={}'.format(name, value) for name, value in params.items())
 
 	response = requests.get('https://api.phrasefinder.io/search?' + params)
@@ -18,32 +38,47 @@ def APIexecute(query, i):
 	for elem in out['phrases']:
 		mc = elem["mc"]
 		ans.append([mc, elem["tks"][i]['tt']])
-	return ans
+	dic = {}
+	for i in range(0, len(ans)):
+		dic[ans[i][1]] = dic.get(ans[i][1], 0) + ans[i][0]
+
+	return zip(dic.values(), dic.keys())
 
 def APIsuggest(inl, targ):
+	def sorter(a):
+		dist = distance(a[1], inl[targ])
+		ans = a[0]
+		if(dist == 0):
+			ans = ans + 10000000	
+		elif(dist == 1):
+			ans = ans + 1000000
+		elif(dist == 2):
+			ans = ans + 5000
+		return ans
+
 	left = max(0, targ-1)
 	right = min(targ+1, len(inl)-1)
 	if(left == targ):
 		if(targ+2 < len(inl)):
 			string =  "? " + inl[targ+1] + " " + inl[targ+2]
-			return sorted(APIexecute(string, 0), reverse=True)
+			return sorted(APIexecute(string, 0), reverse=True, key = sorter)
 		elif(targ+1 < len(inl)):
 			string = "? " + inl[targ+1]
-			return sorted(APIexecute(string, 0), reverse=True)
+			return sorted(APIexecute(string, 0), reverse=True, key = sorter)
 		else:
 			return [(0, inl[targ],)]
 	elif(right == targ):
 		if(targ-2 >= 0):
 			string = inl[targ-2] + " " + inl[targ-1] + " ?"
-			return sorted(APIexecute(string, 2), reverse=True)
+			return sorted(APIexecute(string, 2), reverse=True, key = sorter)
 		elif(targ-1 >= 0):
 			string = inl[targ-1] + " ?"
-			return sorted(APIexecute(string, 1), reverse=True)
+			return sorted(APIexecute(string, 1), reverse=True, key = sorter)
 		else:
 			return [(0, inl[targ],)]
 	else:
 		string = inl[targ-1] + " ? " + inl[targ+1]
-		return sorted(APIexecute(string, 1), reverse = True)
+		return sorted(APIexecute(string, 1), reverse=True, key = sorter)
 
 
 # Inputs a list of strings
@@ -69,7 +104,9 @@ def trigramCheckSingleSentence(input):
 			continue
 		elif(it+1 in nounIndices):
 			suggests = APIsuggest(input, it)
-			if(suggests[0][1] == word):
+			if(suggests == []):
+				ans.append([word])
+			elif(suggests[0][1] == word):
 				ans.append([word])
 			else:
 				ans.append([x[1] for x in suggests] + [word])
@@ -77,12 +114,16 @@ def trigramCheckSingleSentence(input):
 			input.insert(it+1, '?')	
 			suggests = APIsuggest(input, it+1)
 			# print(suggests[0][1])
-			if(suggests[0][1].lower() in articles):
+			if(suggests == []):
+				ans.append([word])
+			elif(suggests[0][1].lower() in articles):
 				ans.append([suggests[0][1]])
 			input.pop(it+1)
 		elif(not it in nounIndices):
 			suggests = APIsuggest(input, it)
-			if(suggests[0][1] == word):
+			if(suggests == []):
+				ans.append([word])
+			elif(suggests[0][1] == word):
 				ans.append([word])
 			else:
 				ans.append([x[1] for x in suggests] + [word])
