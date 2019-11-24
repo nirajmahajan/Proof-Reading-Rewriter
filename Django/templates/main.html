@@ -1,0 +1,159 @@
+<!doctype html>
+<html>
+<head>
+    <title>Proof Reading Rewriter</title>
+    <style>
+	    * {
+	    	font-family: monospace;
+	    }
+		body {
+			background-color: linen;
+		}
+		textarea, .re {
+		    display: block;
+		    margin-left: auto;
+		    margin-right: auto;
+		    width: 95vw;
+	    }
+	    .re {
+	    	padding-top: 10px;
+	    }
+	    ul {
+	    	display: block;
+		    margin-left: auto;
+		    margin-right: auto;
+	    }
+	    table {
+			border-collapse: collapse;
+		    margin-left: auto;
+		    margin-right: auto;
+			width: 40vw;
+		}
+
+		td, th {
+			border: 1px solid #dddddd;
+			text-align: center;
+			padding: 8px;
+		}
+
+		tr:nth-child(odd) {
+			background-color: #ffffff;
+		}
+		tr:nth-child(even) {
+			background-color: #dddddd;
+		}
+	</style>
+</head>
+<body style="font-size:20px">
+   <h1 style="text-align: center;">Proof Reading Rewriter</h1>
+   <form action="." method="POST">{% csrf_token %}
+	   	<textarea style="font-size:20px" type="text" name="text" id="text" oninput="process()" rows="7">{{ original }}</textarea>
+	   	<textarea type="text" name="recompute" id="recompute" value="1"></textarea>
+	   	<textarea type="text" name="curr_word" id="curr_word">{{ curr_word }}</textarea>
+	   	<textarea type="text" name="changed" id="changed"></textarea>
+	   	<textarea type="text" name="replaced" id="replaced"></textarea>
+	   	<input type="submit" value="Process" id="submit" />
+   </form>
+   <div class="re">
+   {% for word in words %}
+   <div id="w{{ forloop.counter0 }}" 
+   class="inline-block link" 
+   onclick="processWord(this.id)" 
+   style="display:inline;
+   font-size:20px;
+   {% if word.1 == 1 %}
+   text-decoration: underline;
+   text-decoration-color: red;
+   {% elif word.1 == 2 %}
+   text-decoration: underline;
+   text-decoration-color: green;
+   {% elif word.1 == 3 %}
+   text-decoration: underline;
+   text-decoration-color: blue;
+   {% endif %}
+
+   ">{{ word.0 }}</div>
+   {% endfor %}
+	</div>
+   {% block content %}
+   {% endblock %} 
+
+   <div style="overflow-x:auto; padding-top: 10px">
+   <table id="suggestions">
+   {% for sub_item in my_list %}
+   <tr id="s{{ forloop.counter0 }}" 
+   onclick="replace(this.id)"><td id="e{{ forloop.counter0 }}">{{ sub_item }}</td></tr>
+   {% endfor %}
+   </table></div>
+
+   <script>
+   	var n1, pos, txtarea;
+   	init();
+   	function setCurPos(pos){
+   		txtarea.focus();
+    	txtarea.setSelectionRange(pos,pos);
+   	}
+   	function init(){
+   		document.getElementById("submit").style.display = "none";
+   		document.getElementById("replaced").style.display = "none";
+   		document.getElementById("changed").style.display = "none";
+   		document.getElementById("recompute").style.display = "none";
+   		document.getElementById("curr_word").style.display = "none";
+   		// document.getElementById("curr_word").innerHTML="";
+   		document.getElementById("changed").innerHTML="-1";
+   		document.getElementById("replaced").innerHTML="-1";
+   		document.getElementById("recompute").innerHTML="1";
+   		pos = sessionStorage.getItem("curPos");
+   		txtarea = document.getElementById("text");
+   		if(pos==null) pos = 0;
+	   	setCurPos(pos);
+	    n1 = [];
+	    fullstops(txtarea.value, n1);
+    }
+    function processWord(id){
+    	document.getElementById("curr_word").innerHTML = id.slice(1);
+	    sessionStorage.setItem("selectedWord", id);
+	    document.getElementById("recompute").innerHTML="0";
+	    document.getElementById("submit").click();
+    }
+    function replace(id){
+    	var nid = id.slice(1);
+    	document.getElementById("replaced").innerHTML=nid;
+    	document.getElementById("submit").click();
+    }
+    function process(){
+    	var curr = document.getElementById("text");
+    	var n2 = [];
+    	fullstops(curr.value, n2);
+    	sessionStorage.setItem("curPos", curr.selectionEnd)
+    	curr = sessionStorage.getItem("selectedWord");
+    	if(curr==null) curr=-1;
+    	document.getElementById("curr_word").innerHTML = curr.toString();
+    	var check = arraysEqual(n2, n1);
+    	if(check != n2.length){
+    		document.getElementById("changed").innerHTML=check.toString();
+    		document.getElementById("submit").click();
+    	}
+    }
+    function arraysEqual(a, b) {
+		  if (a === b) return a.length;
+		  if (a == null || b == null) return 0;
+		  if (a.length != b.length) return a.length-1;
+
+		  for (var i = 0; i < a.length; ++i) {
+		    if (a[i] != b[i]) return i;
+		  }
+		  return a.length;
+	}
+	function fullstops(a, n){
+		for (let i = 0; i < a.length; i++) {
+		var curr = a.charAt(i);
+		if(curr=="." || curr=="?" || curr=="!")
+			n.push(i);
+		}	
+	}
+</script>
+
+   </body>
+   
+</html>
