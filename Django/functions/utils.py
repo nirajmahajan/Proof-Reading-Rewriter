@@ -5,8 +5,9 @@ import nltk
 import urllib
 import json
 from nltk.tokenize.treebank import TreebankWordDetokenizer
+from functions.main import *
 
-sys.path.insert(0, '../../')
+# sys.path.insert(0, '../../')
 from main import *
 
 # made the strings raw
@@ -60,11 +61,11 @@ def form_words(sent_list):
 
 
 def getSuggestions(sentence, mode):
-    tempans = [[[] for x in sentence.split()], 1]
-    # (ans, comment) = processSentence(x, 'grammar')
+    # tempans = [[[] for x in sentence.split()], 1]
+    (ans, comment) = processSentence(sentence, 'grammar')
     #returns [a, b] where a are suggestions and b is the mode of sentence currently
-    # return [ans, 1]
-    return tempans
+    return [ans, 1]
+    # return tempans
 
 def sync_word(w1, w2):
     l1 = nltk.pos_tag(nltk.word_tokenize(w1))
@@ -78,7 +79,6 @@ def sync_word(w1, w2):
         if i[1] != 'RB':
             ans = ans + i[0]
     return ans
-
 
 def syn_list(word):
     url = "https://api.datamuse.com/words?ml=" + word
