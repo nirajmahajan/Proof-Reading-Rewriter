@@ -1,4 +1,8 @@
 import re
+import nltk
+import urllib
+import json
+from nltk.tokenize.treebank import TreebankWordDetokenizer
 
 alphabets= "([A-Za-z])"
 prefixes = "(Mr|St|Mrs|Ms|Dr)[.]"
@@ -32,6 +36,7 @@ def split_into_sentences(text):
     sentences = text.split("<stop>")
     sentences = sentences[:-1]
     sentences = [s.strip() for s in sentences]
+    sentences = [TreebankWordDetokenizer().detokenize(nltk.word_tokenize(s)) for s in sentences]
     return sentences
 
 def form_words(sent_list):
@@ -39,3 +44,47 @@ def form_words(sent_list):
     for x in sent_list:
         l += x.split();
     return l
+
+def getSuggestions(sentence, mode):
+    l = [[] for x in sentence.split()]
+    #returns [a, b] where a are suggestions and b is the mode of sentence currently
+    return [l, 1]
+
+def sync_word(w1, w2):
+    l1 = nltk.pos_tag(nltk.word_tokenize(w1))
+    w = l1.pop(0)
+    ans = w2
+    if w[0][0].isupper():
+        ans = w2.capitalize()
+    else:
+        ans = w2.lower()
+    for i in l1:
+        if i[1] != 'RB':
+            ans = ans + i[0]
+    return ans
+
+def syn_list(word):
+    url = "https://api.datamuse.com/words?ml=" + word
+    response = urllib.request.urlopen(url)
+    data = response.read().decode("utf-8")
+    json_data = json.loads(data)
+    word_list = []
+    for x in json_data:
+        word_list.append(x['word'])
+    return word_list
+
+# def rewrite(sentence):
+#     rewrite_types = [u'NN', u'NNS', u'JJ', u'JJS']
+#     pos_tokenizer = nlp(sentence)
+#     words = []
+#     for token in pos_tokenizer:
+#         print(token.pos_, token.text, token.tag_)
+#         if token.tag_ in rewrite_types:
+#             words.append(token.text)
+#     rewrited_sentence = sentence
+#     for word in words:
+#         word_syn = best_syn(word)
+#         rewrited_sentence = rewrited_sentence.replace(word, word_syn)
+#     l=(nltk.word_tokenize(rewrited_sentence))
+#     rewrited_sentence=TreebankWordDetokenizer().detokenize(l)
+#     return rewrited_sentence
