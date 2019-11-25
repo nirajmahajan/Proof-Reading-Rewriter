@@ -18,7 +18,7 @@ verbs = ['VB', 'VBP', 'VBZ', 'VBG', 'VBD']
 does = ['do', 'did', 'does']
 proper = ['NNP', 'NNPS']
 
-with open('participles.pickle', 'rb') as handle:
+with open('../../Rishi/participles.pickle', 'rb') as handle:
     participles = pickle.load(handle)
 def act_pas(sen):
 	l = nltk.word_tokenize(sen)

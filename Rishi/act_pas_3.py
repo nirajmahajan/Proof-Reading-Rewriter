@@ -1,4 +1,4 @@
-from act_pas_2 import *
+from Rishi.act_pas_2 import *
 
 does = ['do', 'did', 'does']
 wh_q = ['when', 'where', 'how', 'why']
