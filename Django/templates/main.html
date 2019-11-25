@@ -87,7 +87,7 @@
 
    <script>
     let typingTimer;             
-    let doneTypingInterval = 1000;  
+    let doneTypingInterval = 500;  
    	var n1, pos, txtarea;
    	init();
    	function setCurPos(pos){
@@ -113,7 +113,7 @@
     }
     txtarea.addEventListener('keyup', () => {
         clearTimeout(typingTimer);
-        typingTimer = setTimeout(process, doneTypingInterval);
+        typingTimer = setTimeout(processDelay, doneTypingInterval);
     });
     // txtarea.addEventListener('input', process);
     function processWord(id){
@@ -141,11 +141,20 @@
     		document.getElementById("submit").click();
     	}
     }
+    function processDelay(){
+      var curr = document.getElementById("text");
+      var n2 = [];
+      fullstops(curr.value, n2);
+      sessionStorage.setItem("curPos", curr.selectionEnd)
+      curr = sessionStorage.getItem("selectedWord");
+      if(curr==null) curr=-1;
+      document.getElementById("curr_word").innerHTML = curr.toString();
+      document.getElementById("submit").click();
+    }
     function arraysEqual(a, b) {
 		if (a === b) return a.length;
 		if (a == null || b == null) return 0;
 		if (a.length != b.length) return a.length-1;
-
 		for (var i = 0; i < a.length; ++i) {
 		  if (a[i] != b[i]) return i;
 		}
