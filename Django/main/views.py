@@ -15,6 +15,7 @@ def main_view(request, *args, **kwargs):
     global global_types
     global global_suggestions
     default = ["hello yes", "world", "how"]
+    default = []
     my_context = {}
     my_context["my_list"] = default
     my_context["words"] = []
@@ -44,31 +45,28 @@ def main_view(request, *args, **kwargs):
     if (recompute == 0):
         chInd = getIndex(sent_list, curr_word)
         my_context["words"] = context_words()
-        my_context["my_list"] = default
-        # my_context["my_list"] = global_suggestions[chInd[0]][chInd[1]]
+        # my_context["my_list"] = default
+        my_context["my_list"] = global_suggestions[chInd[0]][chInd[1]]
         return render(request, "main.html", my_context)
 
     elif (replaced != -1):
         if (curr_word == -1):
             my_context["my_list"] = default
         else:
-            new_word = sync_word(global_words[curr_word],
-                                 my_context["my_list"][replaced])
-            chInd = replace_in_sent(sent_list, curr_word, new_word)
-            global_words = form_words(sent_list)
-            my_context["original"] = ""
-            for i in sent_list:
-                my_context["original"] += " " + i
-            my_context["original"] = my_context["original"][1:]
-            my_context["my_list"] = default
-            # process here words and sent_list
-            mode = updateTypes(chInd, new_word)
-            [global_suggestions[chInd[0]], mode] = getSuggestions(global_sent_list[chInd[0]], mode)
-            temp = []
-            for x in global_types[chInd[0]]:
-                temp += [[x[0], mode]]
-            global_types[chInd[0]] = temp
-            curr_word = -1
+        	chInd = getIndex(sent_list, curr_word)
+        	my_context["my_list"] = global_suggestions[chInd[0]][chInd[1]]
+        	new_word = my_context["my_list"][replaced]
+        	chInd = replace_in_sent(sent_list, curr_word, new_word)
+        	global_words = form_words(sent_list)
+        	my_context["original"] = " ".join(sent_list)
+        	my_context["my_list"] = default
+        	mode = updateTypes(chInd, new_word)
+        	[global_suggestions[chInd[0]], mode] = getSuggestions(global_sent_list[chInd[0]], mode)
+        	temp = []
+        	for x in global_types[chInd[0]]:
+        		temp += [[x[0], mode]]
+        	global_types[chInd[0]] = temp
+        	curr_word = -1
     else:
         update(sent_list)
 
@@ -77,9 +75,6 @@ def main_view(request, *args, **kwargs):
         my_context["passiveForm"] = getPassive(sent_list)
     else:
         my_context["passiveForm"] = ""
-    # my_context["passive"] = 1
-    # my_context["passiveForm"] = getPassive(sent_list)
-    # print(my_context["passiveForm"])
     my_context["words"] = context_words()
     return render(request, "main.html", my_context)
 
@@ -111,10 +106,11 @@ def update(sent_list):
                 if (x == []):
                     new_type[i] += [[0, mode]]
                 else:
-                    new_type += [mode, mode]
+                    new_type[i] += [[mode, mode]]
         else:
             new_sugg[i] = global_suggestions[ind]
             new_type[i] = global_types[ind]
+
     global_suggestions = new_sugg
     global_sent_list = sent_list
     global_words = form_words(global_sent_list)

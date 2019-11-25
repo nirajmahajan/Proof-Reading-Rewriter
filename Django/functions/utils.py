@@ -5,8 +5,9 @@ import nltk
 import urllib
 import json
 from nltk.tokenize.treebank import TreebankWordDetokenizer
+from functions.main import *
 
-sys.path.insert(0, '../../')
+# sys.path.insert(0, '../../')
 from main import *
 
 # made the strings raw
@@ -79,7 +80,6 @@ def sync_word(w1, w2):
         if i[1] != 'RB':
             ans = ans + i[0]
     return ans
-
 
 def syn_list(word):
     url = "https://api.datamuse.com/words?ml=" + word
