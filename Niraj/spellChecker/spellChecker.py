@@ -182,7 +182,20 @@ def spellCheck(in_list, limit = 5, only_wrong = True):
 		ans[it] = ans[it][0:min(limit,len(ans[it]))]
 	# c.close()
 	# conn.close()
-	return ans
+
+
+	fa = []
+	for elem in ans:
+		seti = set()
+		tempa = []
+		for part in elem:
+			if part in seti:
+				continue
+			else:
+				seti.add(part)
+				tempa.append(part)
+		fa.append(tempa)
+	return fa
 
 
 
