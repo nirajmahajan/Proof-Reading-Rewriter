@@ -1,3 +1,10 @@
+from spacy.tokenizer import Tokenizer
+from spacy.lang.en.examples import sentences
+from suggest_synonym import *
+from nltk.corpus import wordnet
+import spacy
+
+
 import re
 import sys
 import os
@@ -81,6 +88,8 @@ def sync_word(w1, w2):
             ans = ans + i[0]
     return ans
 
+nlp = spacy.load('en_core_web_lg')
+
 def syn_list(word):
     url = "https://api.datamuse.com/words?ml=" + word
     response = urllib.request.urlopen(url)
@@ -89,7 +98,7 @@ def syn_list(word):
     word_list = []
     for x in json_data:
         word_list.append(x['word'])
-    return word_list
+    return word_list[:min(4, len(word_list))]
 
 
 def getPassive(sent_list):
@@ -99,18 +108,21 @@ def getPassive(sent_list):
 def join(li):
     return " ".join(li)
 
-# def rewrite(sentence):
-#     rewrite_types = [u'NN', u'NNS', u'JJ', u'JJS']
-#     pos_tokenizer = nlp(sentence)
-#     words = []
-#     for token in pos_tokenizer:
-#         print(token.pos_, token.text, token.tag_)
-#         if token.tag_ in rewrite_types:
-#             words.append(token.text)
-#     rewrited_sentence = sentence
-#     for word in words:
-#         word_syn = best_syn(word)
-#         rewrited_sentence = rewrited_sentence.replace(word, word_syn)
-#     l=(nltk.word_tokenize(rewrited_sentence))
-#     rewrited_sentence=TreebankWordDetokenizer().detokenize(l)
-#     return rewrited_sentence
+def rewrite(sentence):
+    ans = []
+    rewrite_types = [u'NN', u'NNS', u'JJ', u'JJS']
+    pos_tokenizer = nlp(sentence)
+    words = []
+    for token in pos_tokenizer:
+        print(token.pos_, token.text, token.tag_)
+        if token.tag_ in rewrite_types:
+            words.append(token.text)
+    rewrited_sentence = sentence
+    for word in words:
+        ans.append(syn_list(word))
+        # word_syn = best_syn(word)
+        # rewrited_sentence = rewrited_sentence.replace(word, word_syn)
+    # l=(nltk.word_tokenize(rewrited_sentence))
+    # rewrited_sentence=TreebankWordDetokenizer().detokenize(l)
+    # return rewrited_sentence
+    return ans
