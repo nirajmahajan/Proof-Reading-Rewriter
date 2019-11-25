@@ -60,11 +60,12 @@ def form_words(sent_list):
 
 
 def getSuggestions(sentence, mode):
+    mode_convert = ['wont come', 'grammar', 'grammar', 'rewriter']
     tempans = [[[] for x in sentence.split()], 1]
-    # (ans, comment) = processSentence(x, 'grammar')
+    (ans, comment) = processSentence(sentence, mode_convert[mode])
     #returns [a, b] where a are suggestions and b is the mode of sentence currently
-    # return [ans, 1]
-    return tempans
+    return [ans, mode]
+    #return tempans
 
 def sync_word(w1, w2):
     l1 = nltk.pos_tag(nltk.word_tokenize(w1))

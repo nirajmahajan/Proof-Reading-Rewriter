@@ -12,6 +12,7 @@ from Niraj.preProcessing.caseCorrector import *
 from Niraj.trigramChecker.trigramChecker import *
 from Rishi.article_checker import *
 from Rishi.act_pas_3 import active_to_passive
+from nltk.tokenize.treebank import TreebankWordDetokenizer
 
 # conn = sqlite3.connect('Niraj/data/dumps/Trigram-Bigram-Dictionary.db')
 # c = conn.cursor()
@@ -39,9 +40,10 @@ def prepare(lst):
 
 # Driver Function to run the code
 # Three modes are possible
-# 	1) grammar
-# 	2) rewriter
-# 	3) voice
+#   1) spell
+# 	2) grammar
+# 	3) rewriter
+# 	4) voice
 # INPUT : sentence (string) and a mode(string)
 # OUTPUT : list of words and a comment
 def processSentence(sentence, mode):
@@ -62,9 +64,10 @@ def processSentence(sentence, mode):
 		# run article checker
 		art_ans = art_check(to_art)
 		# now art_ans is a list of strings which are corrected wrt articles (tentatively)
-
+		art_ans_string = TreebankWordDetokenizer().detokenize(art_ans)
 		# run trigram matcher
-		trigram_ans = trigramCheck(art_ans);
+		to_trigram = noun_identifier(art_ans_string)
+		trigram_ans = trigramCheck(to_trigram)
 		return (prepare(trigram_ans), 'grammar')
 		# grammarAllCorrect = True
 		# to_rewriter = []
