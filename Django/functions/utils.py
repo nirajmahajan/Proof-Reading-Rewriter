@@ -1,6 +1,5 @@
 from spacy.tokenizer import Tokenizer
 from spacy.lang.en.examples import sentences
-from suggest_synonym import *
 from nltk.corpus import wordnet
 import spacy
 
@@ -15,7 +14,7 @@ from nltk.tokenize.treebank import TreebankWordDetokenizer
 from functions.main import *
 
 # sys.path.insert(0, '../../')
-from main import *
+# from main import *
 
 # made the strings raw
 alphabets = r"([A-Za-z])"
@@ -88,7 +87,7 @@ def sync_word(w1, w2):
             ans = ans + i[0]
     return ans
 
-nlp = spacy.load('en_core_web_lg')
+nlp = spacy.load('en_core_web_sm')
 
 def syn_list(word):
     url = "https://api.datamuse.com/words?ml=" + word

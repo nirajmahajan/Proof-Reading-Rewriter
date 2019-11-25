@@ -11,7 +11,20 @@ from Niraj.spellChecker.spellChecker import *
 from Niraj.preProcessing.caseCorrector import *
 from Niraj.trigramChecker.trigramChecker import *
 from Rishi.article_checker import *
+
 from Rishi.act_pas_3 import active_to_passive
+# from spacy.tokenizer import Tokenizer
+# from spacy.lang.en.examples import sentences
+from nltk.corpus import wordnet
+# import spacy
+import re
+import sys
+import os
+import nltk
+import urllib
+import json
+from nltk.tokenize.treebank import TreebankWordDetokenizer
+
 
 # conn = sqlite3.connect('Niraj/data/dumps/Trigram-Bigram-Dictionary.db')
 # c = conn.cursor()
@@ -44,6 +57,39 @@ def prepare(lst):
 # 	3) voice
 # INPUT : sentence (string) and a mode(string)
 # OUTPUT : list of words and a comment
+# nlp = spacy.load('en_core_web_sm')
+
+def syn_list(word):
+    url = "https://api.datamuse.com/words?ml=" + word
+    response = urllib.request.urlopen(url)
+    data = response.read().decode("utf-8")
+    json_data = json.loads(data)
+    word_list = []
+    for x in json_data:
+        word_list.append(x['word'])
+    return word_list[:min(4, len(word_list))]
+
+def rewrite(sentence):
+    ans = []
+    # rewrite_types = [u'NN', u'NNS', u'JJ', u'JJS']
+    # pos_tokenizer = nlp(sentence)
+    words = nltk.word_tokenize(sentence)
+    # for token in pos_tokenizer:
+    #     print(token.pos_, token.text, token.tag_)
+    #     if token.tag_ in rewrite_types:
+    #         words.append(token.text)
+    # rewrited_sentence = sentence
+    for word in words:
+    	if(re.match('^[^a-zA-Z]$', word) != None):
+    		continue
+    	ans.append(syn_list(word))
+        # word_syn = best_syn(word)
+        # rewrited_sentence = rewrited_sentence.replace(word, word_syn)
+    # l=(nltk.word_tokenize(rewrited_sentence))
+    # rewrited_sentence=TreebankWordDetokenizer().detokenize(l)
+    # return rewrited_sentence
+    return ans
+
 def processSentence(sentence, mode):
 	if mode == 'grammar':
 		word_list = caseCorrector(nltk.word_tokenize(sentence))
@@ -76,7 +122,7 @@ def processSentence(sentence, mode):
 		# if(not grammarAllCorrect):
 		# 	return (trigram_ans, 'grammar')
 	elif mode == 'rewriter':
-		return ("Use rewriter here".split(), 'rewriter')
+		return (rewrite(sentence), 'rewriter')
 	elif mode == 'voice':
 		return (active_to_passive(sentence), 'voice')
 	return(('Dunno rewriting functions'.split(), 'voice'))

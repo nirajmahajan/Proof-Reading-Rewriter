@@ -75,7 +75,9 @@ def main_view(request, *args, **kwargs):
         my_context["passiveForm"] = getPassive(sent_list)
     else:
         my_context["passiveForm"] = ""
+    global_words = form_words(sent_list)
     my_context["words"] = context_words()
+    updateSuggestions()
     return render(request, "main.html", my_context)
 
 def context_words():
@@ -114,15 +116,20 @@ def update(sent_list):
     global_types = new_type
     global_sent_list = sent_list
     global_words = form_words(global_sent_list)
-    updateSuggestions()    
 
 def updateSuggestions():
 	global global_types
+	global global_suggestions
 	for x in range(0, len(global_types)):
 		y = [i[0]==0 for i in global_types[x]]
 		if(all(y)):
-			t = x
-			for i in x
+			print("hello")
+			t = []
+			for i in global_types[x]:
+				t += [[i[1], i[1]]]
+			global_types[x] = t
+			global_suggestions[x] = getSuggestions(global_sent_list[x], t[1][1])
+
 def replace_in_sent(sent_list, curr_word, new_word):
     global global_sent_list
     ind = 0
@@ -167,7 +174,7 @@ def checkPassive():
     	m = min([min([x[1] for x in c]) for c in global_types])
     except:
     	return 0
-    if (m > 2):
+    if (m > 0):
         return 1
     else:
         return 0
