@@ -92,7 +92,8 @@ def syn_list(word):
 
 
 def getPassive(sent_list):
-    return join(sent_list)
+    rl = [active_to_passive(s) for s in sent_list]
+    return " ".join(rl)
 
 def join(li):
     return " ".join(li)
