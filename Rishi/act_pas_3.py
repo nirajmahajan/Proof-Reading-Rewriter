@@ -90,5 +90,10 @@ def pas_other(s):
 			return rs
 	return act_pas(s)
 
-
+def active_to_passive(s):
+	rs = pas_other(s)
+	rl = nltk.word_tokenize(rs)
+	rl[0] = rl[0].capitalize()
+	rs = TreebankWordDetokenizer().detokenize(rl)
+	return rs
 
