@@ -72,7 +72,10 @@ def main_view(request, *args, **kwargs):
 
     my_context["passive"] = checkPassive()
     if (my_context["passive"] == 1):
-        my_context["passiveForm"] = getPassive(sent_list)
+        try:
+        	my_context["passiveForm"] = getPassive(sent_list)
+        except: 
+        	my_context["passiveForm"] = ""
     else:
         my_context["passiveForm"] = ""
     global_words = form_words(sent_list)
