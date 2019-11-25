@@ -18,6 +18,12 @@
 	    .re {
 	    	padding-top: 10px;
 	    }
+        .re1 {
+            padding-top: 20px;
+            margin-left: auto;
+            margin-right: auto;
+            width: 95vw;
+        }
 	    ul {
 	    	display: block;
 		    margin-left: auto;
@@ -40,6 +46,28 @@
 		tr:nth-child(even) {
 			background-color: #dddddd;
 		}
+        .button {
+          padding: 15px 25px;
+          padding-top: 10px;
+          font-size: 20px;
+          cursor: pointer;
+          text-align: center;
+          text-decoration: none;
+          outline: none;
+          color: #fff;
+          background-color: #4CAF50;
+          border: none;
+          border-radius: 15px;
+          box-shadow: 0 9px #999;
+        }
+
+        .button:hover {background-color: #3e8e41}
+
+        .button:active {
+          background-color: #3e8e41;
+          box-shadow: 0 5px #666;
+          transform: translateY(4px);
+        }
 	</style>
 </head>
 <body style="font-size:20px">
@@ -85,6 +113,12 @@
    {% endfor %}
    </table></div>
 
+   <div class="re">
+   {% if passive == 1 %}
+   <button class="button" onclick="showPassive()">Show Passive</button>
+   {% endif %}</div>
+   <div class="re1" id="passive">{{ passiveForm }}</h6>
+
    <script>
     let typingTimer;             
     let doneTypingInterval = 500;  
@@ -100,6 +134,7 @@
    		document.getElementById("changed").style.display = "none";
    		document.getElementById("recompute").style.display = "none";
    		document.getElementById("curr_word").style.display = "none";
+        document.getElementById("passive").style.display = "none";
    		// document.getElementById("curr_word").innerHTML="";
    		document.getElementById("changed").innerHTML="-1";
    		document.getElementById("replaced").innerHTML="-1";
@@ -121,6 +156,17 @@
 	    sessionStorage.setItem("selectedWord", id);
 	    document.getElementById("recompute").innerHTML="0";
 	    document.getElementById("submit").click();
+    }
+    function showPassive(){
+        var disp = document.getElementById("passive").style.display
+        if(disp=="none") {
+            document.getElementById("passive").style.display="block";
+            return;
+        }
+        if(disp=="block") {
+            document.getElementById("passive").style.display="none";
+            return;
+        }
     }
     function replace(id){
     	var nid = id.slice(1);
