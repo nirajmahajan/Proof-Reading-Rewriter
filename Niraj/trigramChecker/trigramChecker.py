@@ -132,7 +132,7 @@ def trigramCheck(input):
 		else:
 			ans.append([word])
 
-	check for additional articles
+	# check for additional articles
 	fa = []
 	for i,elem in enumerate(ans):
 		if (len(elem) == 1 and elem[0].startswith('#')):
