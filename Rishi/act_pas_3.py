@@ -95,5 +95,11 @@ def active_to_passive(s):
 	rl = nltk.word_tokenize(rs)
 	rl[0] = rl[0].capitalize()
 	rs = TreebankWordDetokenizer().detokenize(rl)
+	index = -1
+	for i in rl:
+		index = index + 1
+		if i == 'i':
+			rl[index] = 'I'
+
 	return rs
 
