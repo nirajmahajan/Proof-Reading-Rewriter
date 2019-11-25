@@ -96,6 +96,7 @@ def trigramCheck(input):
 		input[it] = input[it][1:]
 
 	articles = ['a', 'an', 'the']
+	art_join = False
 	ans = []
 	for it, word in enumerate(input):
 		# print(ans)
@@ -117,7 +118,8 @@ def trigramCheck(input):
 			if(suggests == []):
 				ans.append([word])
 			elif(suggests[0][1].lower() in articles):
-				ans.append([suggests[0][1]])
+				ans.append(['#' + suggests[0][1]])
+				art_join = True
 			input.pop(it+1)
 		elif(not it in nounIndices):
 			suggests = APIsuggest(input, it)
@@ -130,4 +132,14 @@ def trigramCheck(input):
 		else:
 			ans.append([word])
 
-	return ans
+	# check for additional articles
+	fa = []
+	for i,elem in enumerate(ans):
+		if (len(elem) == 1 and elem[0].startswith('#')):
+			for j in range(0, len(ans[i+1])):
+				ans[i+1][j] = elem[0][1:] + ' ' + ans[i+1][j]
+		else:
+			fa.append(elem)
+
+	return fa
+	# return ans

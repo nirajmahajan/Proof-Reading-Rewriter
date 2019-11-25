@@ -164,9 +164,18 @@ def processWord(stri, limit, only_wrong):
 	return ans
 
 def spellCheck(in_list, limit = 5, only_wrong = True):
+
+	iitbLingo = ['arbit','bandi','chamka','craxxxx','dac','dadda','ditch','dosa','enthu','farra','freshie','god','infi','insti','junta','liby','macha','matka','mug','paf']
+	LingoMeans = ['arbitrary','girl','understand','achievement','Disciplinary Action Committee','Dual Degree Student','drop','Dean of Student Affairs','enthusiasm','FR','First Year Student','awesome','infinite','institute','people','library','rock','MTech Student','study','Performing Arts Festival']
+	lingodic = {}
+	for (lingo, meaning) in zip(iitbLingo, LingoMeans):
+		lingodic[lingo] = meaning
+
 	ans = []
 	for elem in in_list:
-		if (re.match(r'^[^a-zA-Z]$', elem) == None):
+		if(elem in lingodic):
+			ans.append([lingodic[elem]])
+		elif (re.match(r'^[^a-zA-Z]$', elem) == None):
 			ans.append(processWord(elem, limit, only_wrong))
 		else:
 			ans.append([elem])
