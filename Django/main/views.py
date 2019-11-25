@@ -47,7 +47,7 @@ def main_view(request, *args, **kwargs):
         my_context["words"] = context_words()
         # my_context["my_list"] = default
         my_context["my_list"] = global_suggestions[chInd[0]][chInd[1]]
-        return render(request, "main.html", my_context)
+        # return render(request, "main.html", my_context)
 
     elif (replaced != -1):
         if (curr_word == -1):
