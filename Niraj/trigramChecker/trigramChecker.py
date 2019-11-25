@@ -3,7 +3,7 @@ import urllib
 import requests
 import numpy as np
 import re
-from noun_id import *
+from Niraj.trigramChecker.noun_id import *
 	
 # returns the distance in two strings
 # Distance calculated on the basis of Levenshtein Distance Algorithm 
@@ -89,7 +89,7 @@ def APIsuggest(inl, targ):
 # It is assumed that the input list is free of all other irrelevant punctuations
 
 # takes a list of strings and return a list of list of suggestions
-def trigramCheckSingleSentence(input):
+def trigramCheck(input):
 	# using api
 	nounIndices = set([i for i,word in enumerate(input) if word.startswith('#')])
 	for it in nounIndices:

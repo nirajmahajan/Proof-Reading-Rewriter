@@ -1,14 +1,14 @@
 import pickle
 import sqlite3
+import os
 import re
-from helpers import *
+from Niraj.spellChecker.helpers import *
 # Inputs a list of strings 
 # Outputs a list of list of strings
 # Each sublist will have probable suggestions. (Single sized lists if no spelling error)
 # The only punctuations allowed are apostrophes and hifens
 # It is assumed that the input list is free of all other irrelevant punctuations
-
-conn = sqlite3.connect('../data/dumps/Trigram-Bigram-Dictionary.db')
+conn = sqlite3.connect('Niraj/data/dumps/Trigram-Bigram-Dictionary.db')
 c = conn.cursor()
 
 # Some helpers to access the sql database
@@ -89,10 +89,10 @@ def calculateScore(lst, targ):
 
 # unordered set of all dictionary words
 # Extends an online db(check referneces) with the nltk words database
-with open('../data/dumps/db.pickle', 'rb') as handle:
+with open('Niraj/data/dumps/db.pickle', 'rb') as handle:
     WORDS = pickle.load(handle)
 
-with open('../data/dumps/freq.pickle', 'rb') as handle:
+with open('Niraj/data/dumps/freq.pickle', 'rb') as handle:
     FREQ = pickle.load(handle)
 
 # with open('../data/dumps/big.pickle', 'rb') as handle:
@@ -180,6 +180,8 @@ def spellCheck(in_list, limit = 5, only_wrong = True):
 			return vla
 		ans[it].sort(key = trigSorter, reverse=True)
 		ans[it] = ans[it][0:min(limit,len(ans[it]))]
+	# c.close()
+	# conn.close()
 	return ans
 
 
