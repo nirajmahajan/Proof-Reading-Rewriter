@@ -1,0 +1,18 @@
+Word Dataset : 
+https://github.com/dwyl/english-words
+nltk.corpus.words()
+
+Levenshtein Algorithm :
+https://dzone.com/articles/the-levenshtein-algorithm-1
+https://norvig.com/spell-correct.html
+
+OCR - pytesseract
+https://www.pyimagesearch.com/2017/07/10/using-tesseract-ocr-python/
+
+Tense Checker
+https://bergen.edu/ELRC/guidemxtnsex.html
+
+
+
+** Not yet used. kept for future
+https://github.com/janester/mad_libs

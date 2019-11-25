@@ -103,20 +103,26 @@ def update(sent_list):
             [new_sugg[i], mode] = getSuggestions(sent_list[i], 1)
             new_type[i] = []
             for x in new_sugg[i]:
-                if (x == []):
+                if (len(x) == 1):
                     new_type[i] += [[0, mode]]
                 else:
                     new_type[i] += [[mode, mode]]
         else:
             new_sugg[i] = global_suggestions[ind]
             new_type[i] = global_types[ind]
-
     global_suggestions = new_sugg
+    global_types = new_type
     global_sent_list = sent_list
     global_words = form_words(global_sent_list)
-    global_types = new_type
+    updateSuggestions()    
 
-
+def updateSuggestions():
+	global global_types
+	for x in range(0, len(global_types)):
+		y = [i[0]==0 for i in global_types[x]]
+		if(all(y)):
+			t = x
+			for i in x
 def replace_in_sent(sent_list, curr_word, new_word):
     global global_sent_list
     ind = 0
