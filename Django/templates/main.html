@@ -29,13 +29,11 @@
 		    margin-right: auto;
 			width: 40vw;
 		}
-
 		td, th {
 			border: 1px solid #dddddd;
 			text-align: center;
 			padding: 8px;
 		}
-
 		tr:nth-child(odd) {
 			background-color: #ffffff;
 		}
@@ -46,6 +44,7 @@
 </head>
 <body style="font-size:20px">
    <h1 style="text-align: center;">Proof Reading Rewriter</h1>
+   <h2 style="text-align: center;">Ctrl Alt Defeat</h2>
    <form action="." method="POST">{% csrf_token %}
 	   	<textarea style="font-size:20px" type="text" name="text" id="text" oninput="process()" rows="7">{{ original }}</textarea>
 	   	<textarea type="text" name="recompute" id="recompute" value="1"></textarea>
@@ -136,14 +135,14 @@
     	}
     }
     function arraysEqual(a, b) {
-		  if (a === b) return a.length;
-		  if (a == null || b == null) return 0;
-		  if (a.length != b.length) return a.length-1;
+		if (a === b) return a.length;
+		if (a == null || b == null) return 0;
+		if (a.length != b.length) return a.length-1;
 
-		  for (var i = 0; i < a.length; ++i) {
-		    if (a[i] != b[i]) return i;
-		  }
-		  return a.length;
+		for (var i = 0; i < a.length; ++i) {
+		  if (a[i] != b[i]) return i;
+		}
+		return a.length;
 	}
 	function fullstops(a, n){
 		for (let i = 0; i < a.length; i++) {
@@ -152,8 +151,6 @@
 			n.push(i);
 		}	
 	}
-</script>
-
-   </body>
-   
+    </script>
+</body>
 </html>

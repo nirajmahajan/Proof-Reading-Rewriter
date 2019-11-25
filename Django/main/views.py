@@ -71,9 +71,6 @@ def main_view(request, *args, **kwargs):
 	
 	update(sent_list)
 	my_context["words"] = context_words()
-	# types = global_types
-	# for x in range(0, len(types)):
-	# 	my_context["words"] += [[global_words[x], types[x]]]
 	return render(request, "main.html", my_context)
 
 def context_words():
@@ -153,7 +150,6 @@ def getIndex(sent_list, curr_word):
 def updateTypes(chInd, new_word):
 	global global_types
 	[i, j] = chInd
-	print(global_types)
 	c = global_types[i][:j]
 	[a, b] = global_types[i][j]
 	for x in range(0, len(new_word.split())):
