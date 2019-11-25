@@ -2,7 +2,7 @@ import nltk
 from nltk.tokenize.treebank import TreebankWordDetokenizer
 import pickle
 
-with open('Rishi/db.pickle', 'rb') as handle:
+with open('../../Rishi/db.pickle', 'rb') as handle:
     WORDS_DB = pickle.load(handle)
 pro_det = ['WP','WDT','WP$']
 a_an = ['a','an','A','An']

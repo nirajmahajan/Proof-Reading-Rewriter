@@ -1,15 +1,21 @@
 import re
+import sys
+import os
 import nltk
 import urllib
 import json
 from nltk.tokenize.treebank import TreebankWordDetokenizer
 
-alphabets= "([A-Za-z])"
-prefixes = "(Mr|St|Mrs|Ms|Dr)[.]"
-suffixes = "(Inc|Ltd|Jr|Sr|Co)"
-starters = "(Mr|Mrs|Ms|Dr|He\s|She\s|It\s|They\s|Their\s|Our\s|We\s|But\s|However\s|That\s|This\s|Wherever)"
-acronyms = "([A-Z][.][A-Z][.](?:[A-Z][.])?)"
-websites = "[.](com|net|org|io|gov)"
+sys.path.insert(0, '../../')
+from main import *
+
+# made the strings raw
+alphabets= r"([A-Za-z])"
+prefixes = r"(Mr|St|Mrs|Ms|Dr)[.]"
+suffixes = r"(Inc|Ltd|Jr|Sr|Co)"
+starters = r"(Mr|Mrs|Ms|Dr|He\s|She\s|It\s|They\s|Their\s|Our\s|We\s|But\s|However\s|That\s|This\s|Wherever)"
+acronyms = r"([A-Z][.][A-Z][.](?:[A-Z][.])?)"
+websites = r"[.](com|net|org|io|gov)"
 
 def split_into_sentences(text):
     text = " " + text + "  "
@@ -46,9 +52,9 @@ def form_words(sent_list):
     return l
 
 def getSuggestions(sentence, mode):
-    l = [[] for x in sentence.split()]
+    (ans, comment) = processSentence(x, 'grammar')
     #returns [a, b] where a are suggestions and b is the mode of sentence currently
-    return [l, 1]
+    return [ans, 1]
 
 def sync_word(w1, w2):
     l1 = nltk.pos_tag(nltk.word_tokenize(w1))
