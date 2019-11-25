@@ -89,10 +89,10 @@ def calculateScore(lst, targ):
 
 # unordered set of all dictionary words
 # Extends an online db(check referneces) with the nltk words database
-with open('/home/neelaryan2/Downloads/Proof-Reading-Rewriter/Django/Niraj/data/dumps/db.pickle', 'rb') as handle:
+with open('../../Niraj/data/dumps/db.pickle', 'rb') as handle:
     WORDS = pickle.load(handle)
 
-with open('/home/neelaryan2/Downloads/Proof-Reading-Rewriter/Django/Niraj/data/dumps/freq.pickle', 'rb') as handle:
+with open('../../Niraj/data/dumps/freq.pickle', 'rb') as handle:
     FREQ = pickle.load(handle)
 
 # with open('../data/dumps/big.pickle', 'rb') as handle:
@@ -173,8 +173,13 @@ def spellCheck(in_list, limit = 5, only_wrong = True):
 
 	ans = []
 	for elem in in_list:
-		if(elem in lingodic):
-			ans.append([lingodic[elem]])
+		if(elem.lower() in lingodic):
+			toadd = lingodic[elem]
+			if elem[0].isupper():
+				toadd = toadd.Capitalize()
+			else:
+				toadd = toadd.lower()
+			ans.append([toadd])
 		elif (re.match(r'^[^a-zA-Z]$', elem) == None):
 			ans.append(processWord(elem, limit, only_wrong))
 		else:

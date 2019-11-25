@@ -3,6 +3,12 @@ import re
 # This is based on the position of full stops and ^ characters.
 # Corrects only the first letter of every sentence
 def caseCorrector(in_list):
+	for i,elem in enumerate(in_list):
+		if(elem[0].isupper()):
+			in_list[i] = elem.capitalize()
+		else:
+			in_list[i] = elem.lower()
+
 	out_list = in_list.copy()
 	out_list[0] = out_list[0].capitalize()
 	for i in range(len(out_list)):
