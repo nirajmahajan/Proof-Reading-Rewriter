@@ -2,15 +2,15 @@ import nltk
 from nltk.tokenize.treebank import TreebankWordDetokenizer
 import pickle
 
-with open('db.pickle', 'rb') as handle:
+with open('../../Rishi/db.pickle', 'rb') as handle:
     WORDS_DB = pickle.load(handle)
 pro_det = ['WP','WDT','WP$']
 a_an = ['a','an','A','An']
 nouns = ['NN','NNS']
 the_cases = ['RBS','JJS','NNS']
 h_cases = ['hour', 'honest', 'honesty', 'honour', 'honoured']
-def art_check(s):
-	l = nltk.word_tokenize(s)
+def art_check(l):
+	# l = nltk.word_tokenize(s)
 	pos = nltk.pos_tag(l)
 	index = 0
 	vowels = ['a','e','i','o','u','A','E','I','O','U']
@@ -66,7 +66,8 @@ def art_check(s):
 			count_det = 0
 		index = index + 1 
 
-	print(pos)
-	rs = TreebankWordDetokenizer().detokenize(l)
-	return (rs)
-	pass
+	return l
+	# print(pos)
+	# rs = TreebankWordDetokenizer().detokenize(l)
+	# return (rs)
+	# pass

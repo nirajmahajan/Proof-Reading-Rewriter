@@ -46,7 +46,7 @@
    <h1 style="text-align: center;">Proof Reading Rewriter</h1>
    <h2 style="text-align: center;">Ctrl Alt Defeat</h2>
    <form action="." method="POST">{% csrf_token %}
-	   	<textarea style="font-size:20px" type="text" name="text" id="text" oninput="process()" rows="7">{{ original }}</textarea>
+	   	<textarea style="font-size:20px" type="text" name="text" id="text" rows="7">{{ original }}</textarea>
 	   	<textarea type="text" name="recompute" id="recompute" value="1"></textarea>
 	   	<textarea type="text" name="curr_word" id="curr_word">{{ curr_word }}</textarea>
 	   	<textarea type="text" name="changed" id="changed"></textarea>
@@ -86,6 +86,8 @@
    </table></div>
 
    <script>
+    let typingTimer;             
+    let doneTypingInterval = 500;  
    	var n1, pos, txtarea;
    	init();
    	function setCurPos(pos){
@@ -109,6 +111,11 @@
 	    n1 = [];
 	    fullstops(txtarea.value, n1);
     }
+    txtarea.addEventListener('keyup', () => {
+        clearTimeout(typingTimer);
+        typingTimer = setTimeout(processDelay, doneTypingInterval);
+    });
+    // txtarea.addEventListener('input', process);
     function processWord(id){
     	document.getElementById("curr_word").innerHTML = id.slice(1);
 	    sessionStorage.setItem("selectedWord", id);
@@ -134,11 +141,20 @@
     		document.getElementById("submit").click();
     	}
     }
+    function processDelay(){
+      var curr = document.getElementById("text");
+      var n2 = [];
+      fullstops(curr.value, n2);
+      sessionStorage.setItem("curPos", curr.selectionEnd)
+      curr = sessionStorage.getItem("selectedWord");
+      if(curr==null) curr=-1;
+      document.getElementById("curr_word").innerHTML = curr.toString();
+      document.getElementById("submit").click();
+    }
     function arraysEqual(a, b) {
 		if (a === b) return a.length;
 		if (a == null || b == null) return 0;
 		if (a.length != b.length) return a.length-1;
-
 		for (var i = 0; i < a.length; ++i) {
 		  if (a[i] != b[i]) return i;
 		}
