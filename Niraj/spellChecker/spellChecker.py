@@ -8,7 +8,7 @@ from Niraj.spellChecker.helpers import *
 # Each sublist will have probable suggestions. (Single sized lists if no spelling error)
 # The only punctuations allowed are apostrophes and hifens
 # It is assumed that the input list is free of all other irrelevant punctuations
-conn = sqlite3.connect('/home/neelaryan2/Downloads/Proof-Reading-Rewriter/Django/Niraj/data/dumps/Trigram-Bigram-Dictionary.db', check_same_thread=False)
+conn = sqlite3.connect('../../Niraj/data/dumps/Trigram-Bigram-Dictionary.db')
 c = conn.cursor()
 
 # Some helpers to access the sql database
