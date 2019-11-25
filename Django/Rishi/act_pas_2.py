@@ -7,7 +7,7 @@ nouns = {'he':'him','she':'her','i':'me','they':'them', 'we':'us', 'who':'whom'}
 inv_nouns = {'him':'he','her':'she','me':'i','them':'they', 'us':'we', 'whom':'who'}
 noun = ['NN', 'NNS', 'NNP', 'NNPS', 'PRP']
 plural = ['NNS','NNPS']
-det = ['DT', 'PDT', 'PRP$', 'POS']
+det = ['DT', 'PDT', 'PRP$', 'POS', 'JJ']
 haves = ['has', 'had' ,'have']
 aux_plural = ['were', 'are']
 aux_single = ['was', 'is', 'am']
@@ -18,7 +18,7 @@ verbs = ['VB', 'VBP', 'VBZ', 'VBG', 'VBD']
 does = ['do', 'did', 'does']
 proper = ['NNP', 'NNPS']
 
-with open('/home/neelaryan2/Downloads/Proof-Reading-Rewriter/Django/Rishi/participles.pickle', 'rb') as handle:
+with open('../../Rishi/participles.pickle', 'rb') as handle:
     participles = pickle.load(handle)
 def act_pas(sen):
 	l = nltk.word_tokenize(sen)
@@ -344,7 +344,7 @@ def act_pas_helper(sen):
 	else:
 		count = 'single'
 	if objN == 'i':
-		print(objN)
+		#print(objN)
 		isI = 'i'
 	newS = obj + analyse(vL,vTL,count,isI) + "by " + sub + extra
 	return [analyse(vL,vTL,count,isI), obj, sub, extra]
