@@ -11,6 +11,7 @@ from Niraj.spellChecker.spellChecker import *
 from Niraj.preProcessing.caseCorrector import *
 from Niraj.trigramChecker.trigramChecker import *
 from Rishi.article_checker import *
+from Rishi.act_pas_3 import active_to_passive
 
 # conn = sqlite3.connect('Niraj/data/dumps/Trigram-Bigram-Dictionary.db')
 # c = conn.cursor()
@@ -77,7 +78,7 @@ def processSentence(sentence, mode):
 	elif mode == 'rewriter':
 		return ("Use rewriter here".split(), 'rewriter')
 	elif mode == 'voice':
-		return ("Change voice here", 'voice')
+		return (active_to_passive(sentence), 'voice')
 	return(('Dunno rewriting functions'.split(), 'voice'))
 
 # conn.close()
