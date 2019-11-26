@@ -1,8 +1,10 @@
 import nltk
+import os
 from nltk.tokenize.treebank import TreebankWordDetokenizer
 import pickle
 
-with open('/home/neelaryan2/Downloads/Proof-Reading-Rewriter/Django/Rishi/db.pickle', 'rb') as handle:
+pathDB = os.path.abspath('Rishi/db.pickle')
+with open(pathDB, 'rb') as handle:
     WORDS_DB = pickle.load(handle)
 pro_det = ['WP','WDT','WP$']
 a_an = ['a','an','A','An']
@@ -67,7 +69,3 @@ def art_check(l):
 		index = index + 1 
 
 	return l
-	# print(pos)
-	# rs = TreebankWordDetokenizer().detokenize(l)
-	# return (rs)
-	# pass

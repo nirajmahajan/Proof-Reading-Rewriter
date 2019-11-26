@@ -10,7 +10,7 @@ def pas_other(s):
 		word = l.pop(0).lower()
 		i = 1
 		while tag[i][1] not in noun:
-			print(i)
+			#print(i)
 			i = i + 1
 		l.insert(i,word)
 		[v,obj,sub,extra] = act_pas_helper(TreebankWordDetokenizer().detokenize(l))
@@ -19,16 +19,18 @@ def pas_other(s):
 		str1 = " "
 		rs = first + " " + obj + str1.join(vL) + " by " + sub + extra
 		return rs
-	if tag[0][0] in aux_single or tag[0][0] in aux_plural or tag[0][1] == 'MD':
+	if tag[0][0].lower() in aux_single or tag[0][0].lower() in aux_plural or tag[0][0].lower() in haves or tag[0][1] == 'MD':
 		word = l.pop(0).lower()
 		i = 1
 		while tag[i][1] not in noun:
-			print(i)
+			#print(i)
 			i = i + 1
 		l.insert(i,word)
 		rs = TreebankWordDetokenizer().detokenize(l)
-		print(rs)
+		#print(rs)
+		#print(rs)
 		rs = act_pas(rs)
+		#print(rs)
 		rl = nltk.word_tokenize(rs)
 		rl.remove(word)
 		rs = word + " " + TreebankWordDetokenizer().detokenize(rl)
@@ -47,9 +49,9 @@ def pas_other(s):
 				index = index + 1
 			l.insert(index, 'shit')
 			rs = TreebankWordDetokenizer().detokenize(l)
-			print(rs)
+			#print(rs)
 			rs = pas_other(rs)
-			print(rs)
+			#print(rs)
 			rl = rs.split()
 			rl.remove('shit')
 			rs = 'What ' + " ".join(rl)
@@ -61,9 +63,9 @@ def pas_other(s):
 				index = index + 1
 			l.insert(index, 'rivers')
 			rs = TreebankWordDetokenizer().detokenize(l)
-			print(rs)
+			#print(rs)
 			rs = pas_other(rs)
-			print(rs)
+			#print(rs)
 			rl = rs.split()
 			rl.remove('rivers')
 			rs = 'What ' + " ".join(rl)
@@ -72,7 +74,7 @@ def pas_other(s):
 			first = l.pop(0)
 			index = 1
 			while tag[index][1] not in noun:
-				print(tag[index][0],tag[index][1])
+				#print(tag[index][0],tag[index][1])
 				index = index + 1
 				first = first + " " + l.pop(0)
 			main_noun = l.pop(0)
@@ -83,7 +85,7 @@ def pas_other(s):
 				rs = 'what ' + TreebankWordDetokenizer().detokenize(l)
 			first = first + " " + main_noun
 			rs = pas_other(rs)
-			print(rs)
+			#print(rs)
 			rl = rs.split()
 			tp = rl.pop(0)
 			rs = first + " " + " ".join(rl)
