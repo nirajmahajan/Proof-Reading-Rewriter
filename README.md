@@ -40,3 +40,10 @@ The project mainly uses the method of trigrams, where the probability of every w
 This data is mined with the help of text files downloaded from the Gutenberg corpora of books, available freely online.
 (Refer [here](https://webapps.stackexchange.com/questions/12311/how-to-download-all-english-books-from-gutenberg) for more details)
 The above reference gives a way to download several files with URLs. For the code, refer [here](https://github.com/nirajmahajan/Proof-Reading-Rewriter/tree/master/databases/data/gutenburgDownload). 
+
+#### Usage of Code:
+
+Simply run the main.py located in the root directory of the repository in the following manner
+
+```python3 main.py runserver```
+
