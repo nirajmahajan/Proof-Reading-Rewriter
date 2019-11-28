@@ -6,31 +6,31 @@ The exact directory structure must look like this (you can download the respecti
 
 --databases
 
-​		--data
+------data
 
-​				--dumps
+------------dumps
 
-​						--[big.pickle](https://drive.google.com/file/d/1HMjHA-1EjiGol9BmYNl0TLioeJOe9g9k/view?usp=sharing)
+------------------[big.pickle](https://drive.google.com/file/d/1HMjHA-1EjiGol9BmYNl0TLioeJOe9g9k/view?usp=sharing)
 
-​						--[db.pickle](https://drive.google.com/file/d/1yGxo4rcrxrY_W1nEh34Lbwre1pdS3nOv/view?usp=sharing)
+------------------[db.pickle](https://drive.google.com/file/d/1yGxo4rcrxrY_W1nEh34Lbwre1pdS3nOv/view?usp=sharing)
 
-​						--[freq.pickle](https://drive.google.com/file/d/1Yb0afL3qt3vvpS4mruyCHeJ03fmie67J/view?usp=sharing)
+------------------[freq.pickle](https://drive.google.com/file/d/1Yb0afL3qt3vvpS4mruyCHeJ03fmie67J/view?usp=sharing)
 
-​						--Trigram-Bigram-Dictionary.db
+------------------Trigram-Bigram-Dictionary.db
 
-​				--scripts
+--------------scripts
 
-​						--some python files (already there)
+------------------some python files (already there)
 
-​		--rishi-databases
+----------rishi-databases
 
-​				--build.sh
+--------------build.sh
 
-​				--[article.pickle](https://drive.google.com/open?id=1wMel_8TpX7l4aeViGIoXYNjOPl157raW)
+--------------[article.pickle](https://drive.google.com/open?id=1wMel_8TpX7l4aeViGIoXYNjOPl157raW)
 
-​				--[participles.pickle](https://drive.google.com/file/d/1ZWalO9ADelgmOoMXT5tti6QPBxLRnVrq/view?usp=sharing)
+--------------[participles.pickle](https://drive.google.com/file/d/1ZWalO9ADelgmOoMXT5tti6QPBxLRnVrq/view?usp=sharing)
 
-​				--scripts
+--------------scripts
 
-​						--some python file (already there)
+------------------some python file (already there)
 
