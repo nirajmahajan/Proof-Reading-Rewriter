@@ -16,7 +16,7 @@ This proof reading re-writer, built on a Django front end, this project includes
 3. Optical Character Recognition (not augmented into the front end)
 4. Active to Passive Voice Converter
 
-The code corrects errors like:
+##### The code corrects errors like:
 
 1. Spelling Errors
 2. Grammatical Errors like those in:
@@ -30,7 +30,7 @@ The code corrects errors like:
 
 The project mainly uses the method of trigrams, where the probability of every word fitting in a particular position is calculated on the basis of it's position, that is, it's neighbouring words. (biased slightly using bigrams as well).
 
-Apart from this, we also have mined a gargantuan database comprising of:
+##### Apart from this, we also have mined a gargantuan database comprising of:
 
 - 20399999 Bigrams
 - 80278278 Trigrams
