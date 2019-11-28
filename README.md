@@ -45,5 +45,13 @@ The above reference gives a way to download several files with URLs. For the cod
 
 Simply run the main.py located in the root directory of the repository in the following manner
 
-```python3 main.py runserver```
+```bash
+python3 main.py runserver # fire up the server
+firefox localhost:8000 # if firefox installed
+google-chrome localhost:8000 # if google-chrome installed
+```
+
+
+
+
 
