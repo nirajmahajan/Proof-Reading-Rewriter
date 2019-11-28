@@ -50,7 +50,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'ProofReadingRewriter.urls'
+ROOT_URLCONF = 'frontEnd.ProofReadingRewriter.urls'
 
 TEMPLATES = [
     {
@@ -68,7 +68,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'ProofReadingRewriter.wsgi.application'
+WSGI_APPLICATION = 'frontEnd.ProofReadingRewriter.wsgi.application'
 
 
 # Database

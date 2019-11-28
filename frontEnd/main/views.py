@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from functions.utils import *
+from frontEnd.functions.utils import *
 from bisect import bisect_left
 
 global_sent_list = []

@@ -11,7 +11,7 @@ import nltk
 import urllib
 import json
 from nltk.tokenize.treebank import TreebankWordDetokenizer
-from functions.main import *
+from frontEnd.functions.main import *
 
 # sys.path.insert(0, '../../')
 # from main import *
