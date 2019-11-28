@@ -7,12 +7,12 @@
 #	 and grammatical errors have been cleared
 import nltk
 import re
-from Niraj.spellChecker.spellChecker import *
-from Niraj.preProcessing.caseCorrector import *
-from Niraj.trigramChecker.trigramChecker import *
-from Rishi.article_checker import *
+from packages.spellChecker.spellChecker import *
+from packages.preProcessing.caseCorrector import *
+from packages.trigramChecker.trigramChecker import *
+from packages.articleChecker.article_checker import *
 
-from Rishi.act_pas_3 import active_to_passive
+from packages.activeToPassive.act_pas_3 import active_to_passive
 # from spacy.tokenizer import Tokenizer
 # from spacy.lang.en.examples import sentences
 from nltk.corpus import wordnet
