@@ -16,7 +16,7 @@ The exact directory structure must look like this (you can download the respecti
 
 --------------------------[freq.pickle](https://drive.google.com/file/d/1Yb0afL3qt3vvpS4mruyCHeJ03fmie67J/view?usp=sharing)
 
---------------------------Trigram-Bigram-Dictionary.db
+--------------------------[Trigram-Bigram-Dictionary.db](https://drive.google.com/file/d/1ZLFd6tOBeLCQqm9cY2ld-0OpQgrnINA5/view?usp=sharing)
 
 ------------------scripts
 
